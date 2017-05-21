@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  gs:
+    build: .
+    command: "mix run --no-halt"
+    environment:
+      - MIX_ENV=prod
+      - STORAGE_URL=redis://redis:6379/0
+      - FIRST_GS=1
+      - HOSTNAME=localhost
+    ports:
+      - 10000:10000
+    links:
+      - redis
+
+  redis:
+    image: redis

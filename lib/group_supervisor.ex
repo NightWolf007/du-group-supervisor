@@ -1,18 +1,16 @@
 defmodule GroupSupervisor do
-  @moduledoc """
-  Documentation for GroupSupervisor.
-  """
+  @moduledoc false
 
-  @doc """
-  Hello world.
+  alias GroupSupervisor.Model.Group
 
-  ## Examples
+  def start(_type, _args) do
+    if System.get_env("FIRST_GS") == "1", do: on_first_gs()
+    Maru.Supervisor.start_link()
+  end
 
-      iex> GroupSupervisor.hello
-      :world
-
-  """
-  def hello do
-    :world
+  defp on_first_gs do
+    hostname = System.get_env("HOSTNAME")
+    grp = %Group{name: "group1", supervisor: "http://#{hostname}:10000"}
+    Group.save(grp)
   end
 end

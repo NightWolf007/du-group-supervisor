@@ -19,6 +19,7 @@ defmodule GroupSupervisor.API do
     parsers: [:urlencoded, :json, :multipart]
 
   mount GroupSupervisor.API.Node
+  mount GroupSupervisor.API.Sup
 
   rescue_from [MatchError, NotFound] do
     conn
@@ -36,11 +37,5 @@ defmodule GroupSupervisor.API do
     conn
     |> put_status(400)
     |> json(Error.serialize("bad request"))
-  end
-
-  rescue_from :all do
-    conn
-    |> put_status(500)
-    |> json(Error.serialize("server error"))
   end
 end

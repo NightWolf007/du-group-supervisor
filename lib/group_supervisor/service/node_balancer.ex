@@ -4,9 +4,10 @@ defmodule GroupSupervisor.Service.NodeBalancer do
   alias GroupSupervisor.Model.Group
   alias GroupSupervisor.Client
 
-  def find_group() do
+  def find_group do
     Group.find_all()
     |> Enum.map(fn (grp) -> {grp, Client.sup_node_match(grp.supervisor)} end)
+    |> Enum.map(fn ({sup, {:ok, resp}}) -> {sup, resp} end)
     |> Enum.map(fn ({sup, %{body: body}}) -> {sup, body} end)
     |> Enum.map(fn ({sup, %{"match" => match}}) -> {sup, match} end)
     |> Enum.max_by(&elem(&1, 1), fn -> {nil, 0} end)

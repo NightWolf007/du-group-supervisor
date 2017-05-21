@@ -45,6 +45,7 @@ defmodule GroupSupervisor.Mixfile do
       {:exredis, "~> 0.2"},
       {:httpoison, "~> 0.11.1"},
       {:poison, "~> 3.0"},
+      {:secure_random, "~> 0.5"},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:credo, "~> 0.6", only: [:dev, :test]},
       {:espec, "~> 1.3", only: :test},

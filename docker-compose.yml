@@ -7,7 +7,6 @@ services:
     environment:
       - MIX_ENV=prod
       - STORAGE_URL=redis://redis:6379/0
-      - FIRST_GS=1
       - HOSTNAME=localhost
     ports:
       - 10000:10000

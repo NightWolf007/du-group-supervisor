@@ -8,10 +8,18 @@ defmodule GroupSupervisor.Model.Group do
   defstruct [:name, :supervisor]
 
   @doc """
+  Creates struct
+  """
+  @spec new(String.t) :: t
+  def new(sup) do
+    %GroupSupervisor.Model.Group{name: SecureRandom.hex(6), supervisor: sup}
+  end
+
+  @doc """
   Creates struct from Map with string keys
   """
-  @spec new(Map.t) :: t
-  def new(%{"name" => name, "supervisor" => sup}) do
+  @spec from_hash(Map.t) :: t
+  def from_hash(%{"name" => name, "supervisor" => sup}) do
     %GroupSupervisor.Model.Group{name: name, supervisor: sup}
   end
 
@@ -22,7 +30,7 @@ defmodule GroupSupervisor.Model.Group do
   def find_all do
     key("*")
     |> Storage.find_all()
-    |> Enum.map(&new(&1))
+    |> Enum.map(&from_hash(&1))
   end
 
   @doc """
@@ -31,7 +39,7 @@ defmodule GroupSupervisor.Model.Group do
   @spec find(String.t) :: {:ok, t} | :error
   def find(name) do
     with {:ok, data} <- name |> key() |> Storage.find() do
-      {:ok, new(data)}
+      {:ok, from_hash(data)}
     end
   end
 

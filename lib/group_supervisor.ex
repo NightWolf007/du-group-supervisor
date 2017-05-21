@@ -2,15 +2,28 @@ defmodule GroupSupervisor do
   @moduledoc false
 
   alias GroupSupervisor.Model.Group
+  alias GroupSupervisor.Client
 
   def start(_type, _args) do
-    if System.get_env("FIRST_GS") == "1", do: on_first_gs()
+    group = Group.new(supervisor())
+    Group.save(group)
+    if !is_nil(System.get_env("JOIN")), do: join(group)
     Maru.Supervisor.start_link()
   end
 
-  defp on_first_gs do
-    hostname = System.get_env("HOSTNAME")
-    grp = %Group{name: "group1", supervisor: "http://#{hostname}:10000"}
-    Group.save(grp)
+  defp join(grp) do
+    host = System.get_env("JOIN")
+    {:ok, %{body: %{"groups": resp_groups}}} = Client.sup_groups(host)
+    groups = Enum.map(resp_groups, &Group.from_hash(&1))
+    Enum.each(groups, &Group.save(&1))
+    Enum.each(groups, fn (%{supervisor: sup}) -> Client.sup_join(sup, grp) end)
+  end
+
+  defp supervisor do
+    "#{hostname()}:10000"
+  end
+
+  defp hostname do
+    System.get_env("HOSTNAME")
   end
 end

@@ -16,9 +16,9 @@ defmodule GroupSupervisor.API.Node do
     end
 
     desc "Joins node to group"
-    get :join do
+    get :swarm_token do
       token = Client.join_token()
-      conn |> put_status(200) |> json(%{swarm_token: token})
+      conn |> put_status(200) |> json(%{token: token})
     end
   end
 end

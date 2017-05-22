@@ -8,6 +8,8 @@ services:
       - MIX_ENV=prod
       - STORAGE_URL=redis://redis:6379/0
       - HOSTNAME=localhost
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 10000:10000
     links:

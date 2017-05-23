@@ -7,7 +7,7 @@ defmodule GroupSupervisor.Client do
   end
 
   def sup_join(host, group) do
-    host |> build_url("/sup/join") |> post(group)
+    host |> build_url("/sup/join") |> post(group, [{"Content-Type", "application/json"}])
   end
 
   def sup_node_match(host) do
@@ -19,6 +19,6 @@ defmodule GroupSupervisor.Client do
   def process_response_body(body), do: Poison.decode!(body)
 
   defp build_url(host, path) do
-    "http://" <> host <> path
+    "http://" <> host <> ":10000" <> path
   end
 end

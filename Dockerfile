@@ -36,4 +36,6 @@ RUN mix local.hex --force && mix local.rebar --force && \
 COPY . $APP_HOME
 RUN mix compile
 
+EXPOSE 10000
+
 CMD ["mix", "run", "--no-halt"]

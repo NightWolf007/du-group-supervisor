@@ -13,14 +13,14 @@ defmodule GroupSupervisor do
 
   defp join(grp) do
     host = System.get_env("JOIN")
-    {:ok, %{body: %{"groups": resp_groups}}} = Client.sup_groups(host)
+    {:ok, %{body: %{"groups" => resp_groups}}} = Client.sup_groups(host)
     groups = Enum.map(resp_groups, &Group.from_hash(&1))
     Enum.each(groups, &Group.save(&1))
     Enum.each(groups, fn (%{supervisor: sup}) -> Client.sup_join(sup, grp) end)
   end
 
   defp supervisor do
-    "#{hostname()}:10000"
+    hostname()
   end
 
   defp hostname do
